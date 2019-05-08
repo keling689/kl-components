@@ -27,11 +27,12 @@
 					border
 					height="100%"
 					style="width: 100%">
+					
 					<el-table-column
-						 fixed
+						  fixed="left"
                           type="selection"
                           width="55">
-                        </el-table-column>					
+                    </el-table-column>					
 					<el-table-column 
 					  prop="date"
 					  label="日期"
@@ -90,8 +91,8 @@
 </template>
 
 <script>
-	const list = require('../list.json');
-	console.log(list)
+	// const list = require('../list.json');
+	// console.log(list)
 	export default{
 		name:'KlTable',
 		props:{
@@ -107,6 +108,7 @@
 			return {
 				currentPage4: 4,
 				showLength:3,
+				// 查询条件数组
 				searchArr:[
 					{label:'上传日期',type:'el-date-picker'},
 					{label:'最不利压力点',type:'el-input'},
@@ -125,16 +127,26 @@
 					]},
 					{label:'方案名称',type:'el-input'},
 					],
+					// 查询调价参数
 					formData:{
 						time:'',
 						press:'',
 						cycle:'',
 						name:''
 					},
+					// 按钮数组
 					operateArr:[
 						{name:'导出',color:'primary',url:''},
 						{name:'打印',color:'warning',url:''},
 						{name:'新建',color:'success',url:''}
+					],
+					tableItemArr:[
+						{name:'编号',fieldName:'code',width:200},
+						{name:'状态',fieldName:'condition',width:100},
+						{name:'创建人',fieldName:'createBy',width:100},
+						{name:'创建时间',fieldName:'createTime',width:200},
+						{name:'名称',fieldName:'name',width:150},
+						{name:'数量',fieldName:'number',width:100},
 					],
 					 tableData: [{
 						  date: '2016-05-03',
@@ -171,13 +183,21 @@
 			
 		},
 		created(){
-			this.$axios.get('static/data/list.json').then(res=>{
-				console.log(res)
-			}).catch(err=>{
-				console.log(err)
-			})
+			// this.$axios.get('static/data/list.json').then(res=>{
+			// 	console.log(res)
+			// }).catch(err=>{
+			// 	console.log(err)
+			// })
+			this.getList()
 		},
 		methods:{
+			getList(){
+				this.$axios.get('static/data/list.json').then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			showQuery(){
 				return this.searchArr.slice(0,this.showLength)
 			},
@@ -211,6 +231,9 @@
 		}
 		td{
 			text-align: center;
+		}
+		.el-table__header-wrapper{
+			border-bottom: 2px solid #ccc;
 		}
 	}
 	*{
