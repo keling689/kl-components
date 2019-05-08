@@ -5,8 +5,36 @@
 				<div class="table-search">	
 					<div class="query-item" v-for="(item, key, index) in showQuery()"  :key="item.label">
 						<span>{{item.label}}：</span>
+						<!-- <template :is="item.type" v-model="queryObj.queryData[item.model]" clearable></template> -->
 						<div class="query-box">
-							<el-input size="mini" v-model="queryObj.queryData[item.model]" clearable></el-input>
+							<el-input size="mini" v-model="queryObj.queryData[item.model]" clearable v-if="item.type == 'el-input'"></el-input>
+							<el-date-picker
+							v-if="item.type == 'daterange'"
+							  v-model="queryObj.queryData[item.model]"
+							  size="mini"
+							  type="daterange"
+							  clearable
+							  value-format="yyyy-MM-dd"
+							  start-placeholder="开始日期"
+							  end-placeholder="结束日期" style="width: 100%;">
+							</el-date-picker>
+							<el-date-picker
+							 v-if="item.type == 'date'"
+							  v-model="queryObj.queryData[item.model]"
+							  size="mini"
+                               type="date"
+							   value-format="yyyy-MM-dd"
+							  placeholder="选择日期" style="width: 100%;">
+							</el-date-picker>
+							<el-select  v-if="item.type == 'el-select'" v-model="queryObj.queryData[item.model]" clearable placeholder="请选择" size="mini" clearable style="display: block;">
+								<el-option
+								 v-for="item in item.option"
+								 :key="item.value"
+								 :label="item.name"
+								 :value="item.value">
+							   </el-option>
+							</el-select>
+								
 						</div>
 					</div>
 					<!-- 搜索函数暴露出来 -->
@@ -18,7 +46,7 @@
 					</div>
 				</div>
 				<div class="operate-group" :class="{'group-inline':showLength==3}">
-					 <el-button :type="item.color" v-for="item in operateArr" :key="item.name" size="mini" @click="item.method(item.name)">{{item.name}}</el-button>
+					 <el-button  :class="item.icon" :type="item.color || 'primary'" v-for="item in operateArr" :key="item.name" size="mini" @click="item.method(item.name)">{{item.name}}</el-button>
 				</div>	
 			</div>
 			
@@ -32,11 +60,21 @@
 					:max-height="tableHeight"
 					style="width: 100%">
 					<el-table-column
-							v-if="tableObj.tableMethods.selection"
+							v-if="tableObj.selectionShow || false"
 							  fixed="left"
 					          type="selection"
 					          width="55">
 					    </el-table-column>	
+						  <el-table-column
+						  v-if="tableObj.indexShow || false"
+						  label="序号"
+						  width="49px"
+						  fixed
+						  >
+						  <template slot-scope="scope">
+							{{scope.$index+1}}
+						  </template>
+						</el-table-column>
 					<el-table-column	
 					 :show-overflow-tooltip="item.scopeType != 'button'"
 					  v-for="item in tableObj.showItems"
@@ -46,11 +84,9 @@
 					  :label="item.name"  
 					  :min-width="item.width">
 					  <template slot-scope="scope">
-						  <!-- {{item.prop}} -->
 						  <span v-if="!item.scopeType">{{scope.row[item.prop]}}</span>
 						  <span v-html="item.method(scope.row)" v-if="item.scopeType=='formate'"></span>
-						<el-button type="text" size="small" v-for="sonitem in item.buttonArr" :key="sonitem.name" v-if="item.scopeType == 'button'"  @click="sonitem.method(scope.row,that)">{{sonitem.name}}</el-button>
-						<!-- <el-button type="text" size="small">编辑</el-button> -->
+						<el-button type="text" size="small" v-for="sonitem in item.buttonArr" :key="sonitem.name" v-if="item.scopeType == 'button'&&sonitem.isShow(scope.row)" @click="sonitem.method(scope.row,that)">{{sonitem.name}}</el-button>		
 					  </template>
 					</el-table-column>	
 				  </el-table>
@@ -73,6 +109,7 @@
 <script>
 	// const list = require('../list.json');
 	// console.log(list)
+	import api from './api.js'
 	export default{
 		name:'KlTable',
 		props:{
@@ -113,7 +150,6 @@
 				this.showTable = false
 				setTimeout(()=>{
 					this.tableHeight = document.querySelector('.kl-table').clientHeight-document.querySelector('.table-header').clientHeight-60
-					// console.log(this.tableHeight)
 					this.showTable = true
 				},0)	
 			},
@@ -122,15 +158,27 @@
 				this.getList()
 			},
 			getList(){
-				let url = this.queryObj.listUrl;
-				this.$axios.get(url).then(res=>{
-					console.log(res)
-					this.tableData = res.data.data
-					this.pageArr = res.data.pageinfo
+				// console.log(api.fetch())
+				api.fetch({
+					  method: this.queryObj.ajaxObj.method,
+					  apiUrl: this.queryObj.ajaxObj.listUrl,
+					  params: this.queryObj.queryData,
+					  isJson: this.queryObj.ajaxObj.isJson,
+				}).then(res=>{
+					this.tableData = res.data
+					this.pageArr = res.pageinfo
 					this.setTableHeight()	
 				}).catch(err=>{
 					console.log(err)
 				})
+				// this.$axios.get(this.queryObj.ajaxObj.listUrl).then(res=>{
+				// 	console.log(res)
+				// 	this.tableData = res.data.data
+				// 	this.pageArr = res.data.pageinfo
+				// 	this.setTableHeight()	
+				// }).catch(err=>{
+				// 	console.log(err)
+				// })
 			},
 			showQuery(){
 				return this.searchObj.searchArr.slice(0,this.showLength)

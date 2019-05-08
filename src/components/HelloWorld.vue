@@ -15,6 +15,7 @@ export default {
 	  klTable
   },
   data () {
+	let _this = this;
     return {
       msg: 'Welcome to Your Vue.js App热热热若',
 	  tableConfig:{
@@ -25,7 +26,7 @@ export default {
 				that.getList()
 		  	},
 		  	searchArr:[
-		  		{label:'上传日期',type:'el-date-picker',model:'time'},
+		  		{label:'上传日期',type:'date',model:'time'},
 		  		{label:'最不利压力点',type:'el-input',model:'press'},
 		  		{label:'周期类型',type:'el-select',model:'cycle',option:[
 		  			{name:'select1',value:0},
@@ -33,12 +34,18 @@ export default {
 		  			{name:'select3',value:2},
 		  		]},
 		  		{label:'方案名称',type:'el-input',model:'name'},
+				{label:'日期区间',type:'daterange',model:'time'},
 		  	],
 		  },
 		  			
 		  	// 查询条件参数 
 		  	queryObj:{
-		  		listUrl:'static/data/list.json',
+				listUrl:'static/data/list.json',
+				ajaxObj:{
+					method:'get',
+					listUrl:'static/data/list.json',
+					isJson:false,
+				},
 		  		queryData:{
 		  			time:'',
 		  			press:'',
@@ -51,18 +58,23 @@ export default {
 		  
 		  	// 按钮数组
 		  	operateArr:[
-		  		{name:'导出',color:'primary',url:'',method:function(name){
+		  		{name:'导出',color:'primary',icon:'el-icon-download',url:'',method:function(name){
+					console.log(_this.msg)
 		  			alert(name)
 		  		}},
-		  		{name:'打印',color:'warning',url:'',method:function(name){
+		  		{name:'打印',icon:'el-icon-receiving',url:'',method:function(name){
 		  			alert(name)
 		  		}},
-		  		{name:'新建',color:'success',url:'',method:function(name){
+		  		{name:'新建',icon:'el-icon-plus',url:'',method:function(name){
 		  			alert(name)
 		  		}}
 		  	],
 		  	// table表配置参数
 		  	tableObj:{
+				// 左边选择框展示
+				selectionShow:true,
+				// 左边序号展示
+				indexShow:true,
 		  		// table表事件参数配置
 		  		tableMethods:{
 		  			selection:function(val){
@@ -80,18 +92,23 @@ export default {
 		  			{name:'其他',prop:'other',width:100,scopeType:'formate',method:function(row){//需要格式化列函数
 		  				return row.status == 0 ?'停用':'启用'
 		  			}},
-		  			{name:'操作',prop:'operate',width:150,scopeType:'button',buttonArr:[//最后一行操作栏数组
+		  			{name:'操作',prop:'operate',width:150,fixed:'right',scopeType:'button',buttonArr:[//最后一行操作栏数组
 		  				{name:'查看',method:function(row){
-		  					console.log(row)
-							
-		  				}},
+		  					console.log(row)	
+		  				},isShow:function(row,that){
+							return true
+						}},
 		  				{name:'编辑',method:function(row){
 		  					console.log(row)
-		  				}},
+		  				},isShow:function(row,that){
+							return true
+						}},
 		  				{name:'删除',method:function(row,that){
 		  					console.log(row);
 							that.getList()
-		  				}}
+		  				},isShow:function(row,that){
+							return row.status == 0
+						}}
 		  			]},
 		  		]
 		  	},
