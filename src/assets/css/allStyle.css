@@ -1,0 +1,37 @@
+/*
+
+吴国兴
+
+*/
+
+
+/* lzl */
+#dialogModal .el-dialog .el-dialog__header{
+  padding:0.9rem 1.0rem 0.9rem;
+  border-bottom:1px solid #f3f3f4;
+}
+#dialogModal  .el-dialog .el-dialog__body{
+  padding:2.0rem 1.5rem 2.0rem;
+
+}
+/* #dialogModal.dialog  .el-dialog  .el-dialog__body{
+    height:6rem;
+} */
+#dialogModal .el-dialog .el-dialog__body .el-form-item__label{
+  color:#9b9d9f;
+}
+#dialogModal .el-dialog .el-dialog__footer{
+  padding:1.1rem 1.2rem 1.1rem;
+  border-top: 1px solid #f3f3f4;
+  width: 100%;
+  text-align: center;
+}
+#dialogModal .el-dialog .el-dialog__footer .el-button{
+  padding:0.7rem 1.6rem;
+  font-size: 1rem;
+}
+#dialogModal .el-dialog .el-dialog__footer .el-button--primary{
+  color: #FFF;
+  background-color: #0070e4;
+  border-color: #0070e4;
+}

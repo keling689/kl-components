@@ -1,0 +1,89 @@
+@charset "utf-8";
+/*清除默认样式*/
+/*清除margin padding 设置字体 box的style*/
+body, div,iframe, ul, ol, dl, dt, dd, li, dl,
+h1, h2, h3, h4, table,th, td, input, button, select,
+ textarea
+ {
+    margin:0;
+    padding:0;
+    font-style: normal;
+    box-sizing:border-box;
+}
+body::-webkit-scrollbar{
+     /*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+
+}
+/*清除列表标记*/
+ol, ul ,li
+{
+    list-style: none;
+}
+/*设置img的原点 边框*/
+img
+{
+    border: 0;
+    vertical-align:middle;
+}
+/*设置文本颜色 背景 文本居中*/
+body
+{
+    font-family:  "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+    font-size:14px;
+    font-style: normal;
+    color: #333;
+    background-color: #fff;
+}
+/*清除浮动*/
+.clear:after{
+   content:"";
+   display:block;
+   clear:both;
+}
+/*左右浮动*/
+.lf{float:left !important;}
+.rt{float:right !important;}
+/*取消buttom蓝框*/
+button{
+    outline: none;
+}
+/**************************自编默认样式**********************************/
+/*设置a元素，设置颜色，清除下划线*/
+a
+{
+    color:#959595;
+    text-decoration:none;
+}
+/*设置页头和页尾的a元素悬停事件*/
+a:hover
+{
+    color:#333;
+}
+
+.noBorder{
+    border: none !important;
+}
+
+/*滚动条*/
+::-webkit-scrollbar
+{
+    width: 6px;
+    height:6px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    border-radius: 5px;
+    /*-ms-scrollbar-face-color: #3193F6;*/
+     background-color:#3193F6 ;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);;
+}
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    background-color: #F5F5F5;
+}
