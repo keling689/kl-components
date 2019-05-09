@@ -77,9 +77,9 @@ export default {
 				indexShow:true,
 		  		// table表事件参数配置
 		  		tableMethods:{
-		  			selection:function(val){
-		  				console.log(val)
-		  			}
+		  			// selection:function(val){
+		  			// 	console.log(val)
+		  			// }
 		  		},
 		  		// table表展示列配置
 		  		showItems:[
