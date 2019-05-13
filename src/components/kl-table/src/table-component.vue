@@ -2,7 +2,7 @@
 
 		<div class="kl-table">
 			<div class="table-header">
-				<div class="table-search">	
+				<div class="table-search" v-if="!!searchObj">	
 					<div class="query-item" v-for="(item, key, index) in showQuery()"  :key="item.label">
 						<span>{{item.label}}：</span>
 						<!-- <template :is="item.type" v-model="queryObj.queryData[item.model]" clearable></template> -->
@@ -45,7 +45,7 @@
 						<i class="el-icon-arrow-down" v-if="showLength==3"></i>
 					</div>
 				</div>
-				<div class="operate-group" :class="{'group-inline':showLength==3}">
+				<div v-if="!!operateArr" class="operate-group" :class="{'group-inline':showLength==3}">
 					 <el-button  :class="item.icon" :type="item.color || 'primary'" v-for="item in operateArr" :key="item.name" size="mini" @click="item.method(item.name)">{{item.name}}</el-button>
 				</div>	
 			</div>
@@ -56,7 +56,7 @@
 					size="mini"
 					:data="tableData"
 					border
-					 @selection-change="tableObj.tableMethods.selection"
+					 @selection-change="tableObj.tableMethods.selection?tableObj.tableMethods.selection($event):innerSelect($event)"
 					:max-height="tableHeight"
 					style="width: 100%">
 					<el-table-column
@@ -146,6 +146,9 @@
 			// this.setTableHeight()		
 		},
 		methods:{
+			innerSelect(val){
+				console.log(val)
+			},
 			setTableHeight(){
 				this.showTable = false
 				setTimeout(()=>{
@@ -186,7 +189,12 @@
 			showMore(){	
 				// alert(1)
 				if(this.showLength == 3){
-					this.showLength = this.searchObj.searchArr.length
+					if(!!this.searchObj){
+						this.showLength = this.searchObj.searchArr.length
+					}else{
+						this.showLength = 0
+					}
+					
 				}else{
 					this.showLength = 3
 				}
@@ -244,11 +252,13 @@
 		.table-header{
 			position: relative;
 			margin-bottom: 20px;
+			min-height: 40px;
 			.table-search{	
 				margin-bottom: 20px;
 				position: relative;
 				border-bottom: 1px solid #CCCCCC;
 				padding-right: 210px;
+				
 				.query-item{
 					display: inline-block;
 					padding: 5px 10px;
