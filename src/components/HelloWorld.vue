@@ -1,7 +1,7 @@
 <template>
   <div class="hello">  
     <h2>table-组件引入</h2>
-	<div style="height: 600px;border: 1px solid red;font-size: 12px;">
+	<div style="height: 600px;border: 1px solid red;font-size: 14px;">
 		<kl-table v-bind="tableConfig"></kl-table>
 	</div>
   </div>
