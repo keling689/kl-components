@@ -280,6 +280,7 @@
 					    width: 56px;
 						text-align: center;
 						position: absolute;
+						height: 16px;
 						bottom: -16px;
 						border-bottom-right-radius: 4px;
 						border-bottom-left-radius: 4px;
